@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información - First Kanaphan & Khaotung Thanawat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animación de fondo con corazones */
+        .hearts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 107, 53, 0.3);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
+        }
+
+        .nav-btn:hover::before {
+            left: 0;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Título de la página */
+        .page-title {
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ff6b35, #ffd700, #ff6b35);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-title p {
+            font-size: 1.3rem;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Contenido principal */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Perfiles de actores */
+        .actor-profile {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.1));
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .actor-profile::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .actor-profile:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+            border-color: #ffd700;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .profile-image {
+            flex-shrink: 0;
+        }
+
+        .image-placeholder {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .profile-info h2 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .nickname {
+            color: #ffd700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .basic-info {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .info-tag {
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .info-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        /* Detalles del perfil */
+        .profile-details h3 {
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-item:hover {
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .detail-label {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        /* Sección de biografía */
+        .bio-section {
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 53, 0.1));
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            margin-top: 1rem;
+        }
+
+        .bio-section h4 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .bio-section p {
+            color: #ff6b35;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        /* Sección del Ship */
+        .ship-section {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.15), rgba(255, 215, 0, 0.15));
+            border-radius: 25px;
+            padding: 3rem;
+            text-align: center;
+            border: 2px solid rgba(255, 107, 53, 0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .ship-section::before {
+            content: '💕';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        .ship-section h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff6b35, #ffd700, #ff6b35);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+
+        .ship-content p {
+            font-size: 1.1rem;
+            color: #ff6b35;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .ship-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .highlight-card {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
+            border-color: #ffd700;
+        }
+
+        .highlight-card h4 {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .highlight-card p {
+            color: #ff6b35;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            margin-top: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer p {
+            color: #ffd700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .image-placeholder {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .profile-info h2 {
+                font-size: 1.8rem;
+            }
+            
+            .basic-info {
+                justify-content: center;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ship-highlights {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animación de fondo con corazones -->
+    <div class="hearts-background" id="heartsContainer"></div>
+
+    <!-- Header con navegación -->
+    <header>
+        <nav>
+            <a href="canciones.html" class="nav-btn">Canciones</a>
+            <a href="series.html" class="nav-btn">Series</a>
+            <a href="index.html" class="nav-btn">Inicio</a>
+        </nav>
+    </header>
+
+    <!-- Título de la página -->
+    <div class="page-title">
+        <h1>💫 Información Personal 💫</h1>
+        <p>Conoce más sobre First Kanaphan y Khaotung Thanawat</p>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <!-- First Kanaphan -->
+        <div class="actor-profile">
+            <div class="profile-header">
+                <div class="profile-image">
+                    <div class="image-placeholder">
+                        <img class="image-placeholder"src="img/first.jpeg" alt="Imagen de First">
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h2>First Kanaphan Puitrakul</h2>
+                    <p class="nickname">นายกนกพันธุ์ ปุยตระกูล</p>
+                    <div class="basic-info">
+                        <span class="info-tag">🎭 Actor</span>
+                        <span class="info-tag">🎵 Cantante</span>
+                        <span class="info-tag">🌟 GMMTV</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <h3>📋 Datos Personales</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Fecha de Nacimiento:</span>
+                        <span class="detail-value">3 de Septiembre de 1998</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Edad:</span>
+                        <span class="detail-value">26 años</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Altura:</span>
+                        <span class="detail-value">185 cm</span>
+                    </div>
+                     <div class="detail-item">
+                        <span class="detail-label">Peso:</span>
+                        <span class="detail-value">66kg</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Nacionalidad:</span>
+                        <span class="detail-value">Tailandés</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Signo Zodiacal:</span>
+                        <span class="detail-value">Virgo </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Signo zodiacal Chino:</span>
+                        <span class="detail-value">Tigre</span>
+                    </div>
+                     <div class="detail-item">
+                        <span class="detail-label">Empresa:</span>
+                        <span class="detail-value">GMMTV</span>
+                    </div>
+                </div>
+                
+                <div class="bio-section">
+                    <h4>✨ Biografía</h4>
+                    <p>First Kanaphan es un talentoso actor y cantante tailandés que forma parte de la prestigiosa empresa GMMTV. Conocido por su carisma natural y versatilidad actoral, ha conquistado corazones tanto en Tailandia como internacionalmente. Su química especial con su co-estrella Khaotung ha creado uno de los ships más populares del BL tailandés.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khaotung Thanawat -->
+        <div class="actor-profile">
+            <div class="profile-header">
+                <div class="profile-image">
+                    <div class="image-placeholder">
+                        <img class="image-placeholder" src="img/khao.jpeg" alt="imagen de Khao">
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h2>Khaotung Thanawat Rattanakitpaisan</h2>
+                    <p class="nickname">นายธนวัฒน์ รัตนกิจไพศาล</p>
+                    <div class="basic-info">
+                        <span class="info-tag">🎭 Actor</span>
+                        <span class="info-tag">🎵 Cantante</span>
+                        <span class="info-tag">🌟 GMMTV</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <h3>📋 Datos Personales</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Fecha de Nacimiento:</span>
+                        <span class="detail-value">13 de Ocrubre de 1998</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Edad:</span>
+                        <span class="detail-value">26 años</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Altura:</span>
+                        <span class="detail-value">175 cm</span>
+                    </div>
+                       <div class="detail-item">
+                        <span class="detail-label">Peso:</span>
+                        <span class="detail-value">60kg</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Nacionalidad:</span>
+                        <span class="detail-value">Tailandés</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Signo Zodiacal:</span>
+                        <span class="detail-value">Libra</span> </div>
+                    <div class="detail-item"><span class="detail-label">Signo Zodiacal Chino:</span>
+                        <span class="detail-value">Tigre</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Empresa:</span>
+                        <span class="detail-value">GMMTV</span>
+                    </div>
+                </div>
+                
+                <div class="bio-section">
+                    <h4>✨ Biografía</h4>
+                    <p>Khaotung Thanawat es un encantador actor y cantante que ha robado corazones con su actuación natural y expresiva. Su dulzura y talento lo han convertido en uno de los favoritos de GMMTV. La conexión especial que comparte con First tanto en pantalla como fuera de ella ha creado una base de fans dedicada que adora su amistad y química única.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección del Ship -->
+        <div class="ship-section">
+            <h2>💕 FirstKhaotung Ship 💕</h2>
+            <div class="ship-content">
+                <p>La pareja formada por First y Khaotung, conocida cariñosamente como "FirstKhaotung" o "FK", se ha convertido en una de las más queridas del mundo del entretenimiento tailandés. Su amistad genuina, chemistry natural y el cuidado mutuo que se demuestran tanto en pantalla como fuera de ella, han conquistado millones de corazones alrededor del mundo.</p>
+                
+                <div class="ship-highlights">
+                    <div class="highlight-card">
+                        <h4>🎬 En Pantalla</h4>
+                        <p>Su actuación juntos es natural y convincente, creando momentos memorables que quedan grabados en el corazón de los fans.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <h4>🤝 Fuera de Pantalla</h4>
+                        <p>Su amistad real se nota en cada interacción, entrevistas y eventos, mostrando una conexión genuina y especial.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <h4>💖 Con los Fans</h4>
+                        <p>Ambos muestran cariño y agradecimiento hacia su fandom, creando momentos especiales en fan meetings y eventos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>💛 Sitio dedicado a First Kanaphan & Khaotung Thanawat 🧡</p>
+        <p>GMMTV Stars • Con amor para los fans</p>
+        <p>Hecho por <strong>Melina Celeste Pineda</strong> - <a href="https://www.instagram.com/fk_melu/?next=%2F" style="color: #ff6b35;">Instagram</a></p>
+    </footer>
+
+    <script>
+        // Animación de corazones en el fondo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Crear corazones cada 2 segundos
+        setInterval(createHeart, 2000);
+        
+        // Crear algunos corazones iniciales
+        for(let i = 0; i < 5; i++) {
+            setTimeout(createHeart, i * 400);
+        }
+    </script>
+</body>
+</html>

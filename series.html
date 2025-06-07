@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series - First Kanaphan & Khaotung Thanawat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animación de fondo con corazones */
+        .hearts-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 107, 53, 0.3);
+            font-size: 20px;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) scale(0);
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
+            color: #000;
+        }
+
+        .nav-btn:hover::before {
+            left: 0;
+        }
+
+        /* Título de página */
+        .page-title {
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff6b35, #ffd700, #ff6b35);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-title p {
+            font-size: 1.5rem;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Contenido principal */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Secciones de series */
+        .series-section {
+            margin-bottom: 4rem;
+        }
+
+        .series-section h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            position: relative;
+        }
+
+        .series-section h2::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Grid de series */
+        .series-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .series-grid:not(.individual) {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        .series-grid.individual {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Tarjetas de series */
+        .series-card {
+            background: linear-gradient(145deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.05));
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .series-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .series-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: #ffd700;
+            box-shadow: 0 25px 50px rgba(255, 107, 53, 0.3);
+        }
+
+        .series-card:hover::before {
+            opacity: 1;
+        }
+
+        .series-card.featured {
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .series-card.upcoming {
+            border-color: rgba(255, 107, 53, 0.5);
+            position: relative;
+        }
+
+        .series-card.upcoming::after {
+            content: '✨ PRÓXIMAMENTE ✨';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+        }
+
+        /* Poster de series */
+        .series-poster {
+            height: 200px;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #000;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .series-poster::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .series-card:hover .series-poster::before {
+            left: 100%;
+        }
+
+        .first-solo {
+            background: linear-gradient(45deg, #ff6b35, #ff8c65);
+        }
+
+        .khaotung-solo {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+        }
+
+        /* Información de series */
+        .series-info {
+            padding: 2rem;
+        }
+
+        .series-info h3 {
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .series-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .series-meta span {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .series-meta .status {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .synopsis {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .series-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .series-details p {
+            color: #bbb;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .series-details strong {
+            color: #ff6b35;
+        }
+
+        /* Enlaces de series */
+        .series-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .series-link {
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .series-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .series-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .series-link:hover::before {
+            left: 0;
+        }
+
+        /* Sección de estadísticas */
+        .stats-section {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.1));
+            margin: 4rem 0;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .stats-section h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: #ffd700;
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #ff6b35;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        /* Sección próximos proyectos */
+        .upcoming-section {
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 53, 0.1));
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .upcoming-section h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .upcoming-card {
+            text-align: center;
+        }
+
+        .upcoming-card h3 {
+            font-size: 1.5rem;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .upcoming-card p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .upcoming-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .upcoming-link {
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upcoming-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .upcoming-link:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
+        }
+
+        .upcoming-link:hover::before {
+            left: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            margin-top: 3rem;
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        footer p {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        footer a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .page-title p {
+                font-size: 1.2rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .series-grid:not(.individual) {
+                grid-template-columns: 1fr;
+            }
+
+            .series-grid.individual {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .series-links, .upcoming-links {
+                justify-content: center;
+            }
+
+            .series-meta {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animación de fondo con corazones -->
+    <div class="hearts-background" id="heartsContainer"></div>
+
+    <!-- Header con navegación -->
+    <header>
+        <nav>
+            <a href="informacion.html" class="nav-btn">Información</a>
+            <a href="canciones.html" class="nav-btn">Canciones</a>
+            <a href="index.html" class="nav-btn">Inicio</a>
+        </nav>
+    </header>
+
+    <!-- Título de la página -->
+    <div class="page-title">
+        <h1>🎬 Series & Dramas 🎬</h1>
+        <p>Proyectos y series de First Kanaphan y Khaotung Thanawat</p>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <!-- Series Juntos -->
+        <section class="series-section">
+            <h2>💕 Series Juntos</h2>
+            <div class="series-grid">
+                <div class="series-card featured">
+                    <div class="series-poster">
+                        🎭 THE ECLIPSE
+                    </div>
+                    <div class="series-info">
+                        <h3>The Eclipse</h3>
+                        <div class="series-meta">
+                            <span class="year">2022</span>
+                            <span class="genre">BL Drama</span>
+                            <span class="episodes">12 episodios</span>
+                        </div>
+                        <p class="synopsis">Primera colaboración principal de FirstKhaotung. Historia sobre estudiantes en un internado estricto donde Akk (First) y Ayan (Khaotung) desarrollan una relación especial mientras investigan misterios sobrenaturales.</p>
+                        <div class="series-details">
+                            <p><strong>Personajes:</strong> Akk & Ayan</p>
+                            <p><strong>Director:</strong> Kornprom Niyomsil</p>
+                            <p><strong>Plataforma:</strong> GMMTV, YouTube</p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (9.2/10)</p>
+                        </div>
+                        <div class="series-links">
+                            <a href="https://www.youtube.com/playlist?list=example" target="_blank" class="series-link">▶️ Ver Online</a>
+                            <a href="https://mydramalist.com/example" target="_blank" class="series-link">📖 MyDramaList</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="series-card featured">
+                    <div class="series-poster">
+                        🎭 ONLY FRIENDS
+                    </div>
+                    <div class="series-info">
+                        <h3>Only Friends</h3>
+                        <div class="series-meta">
+                            <span class="year">2023</span>
+                            <span class="genre">Romance Drama</span>
+                            <span class="episodes">12 episodios</span>
+                        </div>
+                        <p class="synopsis">Drama universitario donde FirstKhaotung interpretan a Sand y Ray, una pareja compleja con una relación tumultuosa pero llena de química. Explora temas de amistad, amor y crecimiento personal.</p>
+                        <div class="series-details">
+                            <p><strong>Personajes:</strong> Sand & Ray</p>
+                            <p><strong>Director:</strong> Phadej Onlahung</p>
+                            <p><strong>Plataforma:</strong> GMMTV, YouTube</p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (8.9/10)</p>
+                        </div>
+                        <div class="series-links">
+                            <a href="https://www.youtube.com/playlist?list=example" target="_blank" class="series-link">▶️ Ver Online</a>
+                            <a href="https://mydramalist.com/example" target="_blank" class="series-link">📖 MyDramaList</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="series-card featured">
+                    <div class="series-poster">
+                        🎭 Moonlight Chicken
+                    </div>
+                    <div class="series-info">
+                        <h3>Moonlight Chicken</h3>
+                        <div class="series-meta">
+                            <span class="year">2023</span>
+                            <span class="genre">Romance Drama</span>
+                            <span class="episodes">8 episodios</span>
+                        </div>
+                        <p class="synopsis">Aparición especial en este aclamado drama protagonizado por EarthMix.</p>
+                        <div class="series-details">
+                            <p><strong>Personajes:</strong> Alan & Gaipa</p>
+                            <p><strong>Director:</strong> Phadej Onlahung</p>
+                            <p><strong>Plataforma:</strong> GMMTV, YouTube</p>
+                            <p><strong>Estado:</strong> Terminada </p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (8.1/10)</p>
+                           
+                        </div>
+                         <div class="series-links">
+                            <a href="https://www.youtube.com/playlist?list=example" target="_blank" class="series-link">▶️ Ver Online</a>
+                            <a href="https://mydramalist.com/example" target="_blank" class="series-link">📖 MyDramaList</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="series-card ">
+                    <div class="series-poster">
+                        🎭 THE HEART KILLERS
+                    </div>
+                    <div class="series-info">
+                        <h3>The Heart Killers</h3>
+                        <div class="series-meta">
+                            <span class="year">2024</span>
+                            <span class="genre">Action Romance</span>
+                            <span class="episodes">12 episodios</span>
+                        </div>
+                        <p class="synopsis">Sigue la historia de un tatuador, Kant, a quien la policía le encarga investigar los misteriosos asesinatos de empresarios y políticos. Kant sigue a los dos hermanos asesinos, Fadel y Bison, que también dirigen un restaurante. Las cosas dan un giro cuando Kant se enamora de Bison, pero para estar con el, necesita que Fadel no este sobreprotegiendo a su hermano todo el tiempo, ahí entra Style, el mejor amigo de Kant, a quien le propone enamorar a Fadel para quitarlo de su camino.</p>
+                        <div class="series-details">
+                            <p><strong>Personajes:</strong> Kant & Bison</p>
+                            <p><strong>Director:</strong> </p>
+                            <p><strong>Plataforma:</strong> GMMTV</p>
+                            <p><strong>Estado:</strong> Terminada </p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (9/10)</p>
+                        </div>
+                        <div class="series-links">
+                            <a href="https://www.youtube.com/playlist?list=example" target="_blank" class="series-link">▶️ Ver Online</a>
+                            <a href="https://mydramalist.com/example" target="_blank" class="series-link">📖 MyDramaList</a>
+                        </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="series-card upcoming">
+                    <div class="series-poster">
+                        🎭 Cat For Cash
+                    </div>
+                    <div class="series-info">
+                        <h3> Cat For Cash</h3>
+                        <div class="series-meta">
+                            <span class="status">Próximamente</span>
+                            <span class="year">2025</span>
+                            <span class="genre">Romance</span>
+                            <span class="episodes">¿?</span>
+                        </div>
+                        <p class="synopsis">Un joven cobrador de deudas(First - Tiger) visita a la dueña de un café para gatos para pedir dinero, pero después de que ella sufre un ataque cardíaco, su hijo (Khaotung - Lynx) considera vender el café. Mientras dirigen juntos el café, el amor comienza a florecer entre ellos.</p>
+                        <div class="series-details">
+                            <p><strong>Personajes:</strong>Tiger & Lynx</p>
+                            <p><strong>Director:</strong>Kornprom Niyomsil (Au) </p>
+                            <p><strong>Plataforma:</strong> GMMTV</p>
+                            <p><strong>Estado:</strong> Por emitir </p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (¿?/10)</p>
+                        </div>
+                        <div class="series-links">
+                            <a href="https://mydramalist.com/example" target="_blank" class="series-link">📖 MyDramaList</a>
+                        </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Series de First -->
+        <section class="series-section">
+            <h2>🌟 Series de First Kanaphan</h2>
+            <div class="series-grid individual">
+                <div class="series-card">
+                    <div class="series-poster first-solo">
+                        🎭 First Solo
+                    </div>
+                    <div class="series-info">
+                        <h3>Not Me</h3>
+                        <div class="series-meta">
+                            <span class="year">2021</span>
+                            <span class="genre">Action Drama</span>
+                            <span class="episodes">14 episodios</span>
+                        </div>
+                        <p class="synopsis">First participó como personaje secundario en este drama protagonizado por Gun Atthaphan y Off Jumpol.</p>
+                        <div class="series-details">
+                            <p><strong>Personaje:</strong> Gram</p>
+                            <p><strong>Rol:</strong> Secundario</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </section>
+
+        <!-- Series de Khaotung -->
+        <section class="series-section">
+            <h2>✨ Series de Khaotung Thanawat</h2>
+            <div class="series-grid individual">
+                <div class="series-card">
+                    <div class="series-poster khaotung-solo">
+                        🎭 Khaotung Solo
+                    </div>
+                    <div class="series-info">
+                        <h3>A Boss and a Babe</h3>
+                        <div class="series-meta">
+                            <span class="year">2023</span>
+                            <span class="genre">Romance Comedy</span>
+                            <span class="episodes">12 episodios</span>
+                        </div>
+                        <p class="synopsis">Khaotung tuvo una participación especial en esta serie protagonizada por Force y Book.</p>
+                        <div class="series-details">
+                            <p><strong>Personaje:</strong> Aparición especial</p>
+                            <p><strong>Rol:</strong> Invitado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="series-card">
+                    <div class="series-poster khaotung-solo">
+                        🎭 Khaotung Solo
+                    </div>
+                    <div class="series-info">
+                        <h3>55:15 Never Too Late</h3>
+                        <div class="series-meta">
+                            <span class="year">2021</span>
+                            <span class="genre">Drama</span>
+                            <span class="episodes">16 episodios</span>
+                        </div>
+                        <p class="synopsis">Una de las primeras apariciones de Khaotung en una serie de GMMTV.</p>
+                        <div class="series-details">
+                            <p><strong>Personaje:</strong> Personaje secundario</p>
+                            <p><strong>Rol:</strong> Secundario</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estadísticas y Logros -->
+        <section class="stats-section">
+            <h2>🏆 Logros y Estadísticas</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Series Juntos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Episodios como Pareja Principal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2022</div>
+                    <div class="stat-label">Año de Debut como Ship</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">9.0+</div>
+                    <div class="stat-label">Rating Promedio</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Próximos Proyectos -->
+        <section class="upcoming-section">
+            <h2>🔮 Próximos Proyectos</h2>
+            <div class="upcoming-content">
+                <div class="upcoming-card">
+                    <h3>🎬 En Desarrollo</h3>
+                    <p>
+                        GMMTV ha confirmado que First y Khaotung continuarán trabajando juntos en futuros proyectos. 
+                        Se espera el anuncio oficial de nuevas series durante el próximo showcase anual de la empresa.
+                    </p>
+                    <div class="upcoming-links">
+                        <a href="https://www.gmmtv.com" target="_blank" class="upcoming-link">📺 Seguir noticias en GMMTV</a>
+                        <a href="https://twitter.com/gmmtv" target="_blank" class="upcoming-link">🐦 Twitter oficial</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>💛 Sitio dedicado a First Kanaphan & Khaotung Thanawat 🧡</p>
+        <p>GMMTV Stars • Con amor para los fans</p>
+        <p>Hecho por <strong>Celeste Pineda</strong> - <a href="https://www.instagram.com/fk_melu/?next=%2F" target="_blank">Instagram</a></p>
+    </footer>
+
+    <script>
+        // Animación de corazones en el fondo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.1;
+            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            
+            // Diferentes tipos de corazones
+            const hearts = ['💕', '💖', '💗', '💓', '💝', '🧡', '💛'];
+            heart.innerHTML = hearts[Math.random() * hearts.length | 0];
+            
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // Crear corazones periódicamente
+        setInterval(createHeart, 800);
+
+        // Efectos adicionales al hacer hover en las tarjetas
+        document.querySelectorAll('.series-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.filter = 'brightness(1.1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.filter = 'brightness(1)';
+            });
+        });
+
+        // Efecto de parallax ligero en el scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            document.getElementById('heartsContainer').style.transform = `translateY(${rate}px)`;
+        });
+
+        // Animación de entrada para las tarjetas
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Aplicar animación a las tarjetas
+        document.querySelectorAll('.series-card, .stat-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Efecto de brillo en los botones
+        document.querySelectorAll('.series-link, .upcoming-link, .nav-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                
+                let x = e.clientX - e.target.offsetLeft;
+                let y = e.clientY - e.target.offsetTop;
+                
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Agregar estilos para el efecto ripple
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+    </script>
+</body>
+</html>
